@@ -1,8 +1,11 @@
 package org.example;
 
+import java.nio.file.Path;
+
 public class Main {
 
   public static void main(String[] args) {
-    System.out.println("Hello world!");
+
+    final Path filePath = FileCheckUtils.getValidDirectory(args);
   }
 }
