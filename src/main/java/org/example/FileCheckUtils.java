@@ -3,23 +3,22 @@ package org.example;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
-public class FileCheckUtils {
+public final class FileCheckUtils {
   private static final String DEFAULT_DIRECTORY = "src/main/resources";
 
   private FileCheckUtils() {
     throw new IllegalStateException("Utility class");
   }
 
-  static boolean isTxtFile(Path filePath) {
+  public static boolean isTxtFile(Path filePath) {
 
     final String fileName = filePath.getFileName().toString();
 
     return fileName.endsWith(".txt");
   }
 
-  static Optional<Path> getPathIfExists(String arg) {
+  public static Path getPathIfExistsOrDefaultDirectory(String arg) {
 
     try {
 
@@ -27,20 +26,22 @@ public class FileCheckUtils {
 
       if (!Files.isDirectory(filePath)) {
 
-        System.out.println("Path is not a directory");
-        return Optional.empty();
+        System.out.println(
+            "Given path is not a directory. Working with default directory: " + DEFAULT_DIRECTORY);
+        return Path.of(DEFAULT_DIRECTORY);
       }
 
-      return Optional.of(filePath);
+      return filePath;
 
     } catch (IOException e) {
 
-      System.out.println("Path does not exist");
-      return Optional.empty();
+      System.out.println(
+          "Given path does not exist. Working with default directory: " + DEFAULT_DIRECTORY);
+      return Path.of(DEFAULT_DIRECTORY);
     }
   }
 
-  static boolean hasAnyArguments(String[] args) {
+  public static boolean hasAnyArguments(String[] args) {
 
     if (args.length == 0) {
       System.out.println("No arguments were passed");
@@ -50,15 +51,10 @@ public class FileCheckUtils {
     return true;
   }
 
-  public static Path getValidDirectory(String[] args) {
+  public static Path getValidWorkingDirectory(String[] args) {
 
     if (hasAnyArguments(args)) {
-
-      final Optional<Path> filePath = getPathIfExists(args[0]);
-
-      if (filePath.isPresent()) {
-        return filePath.get();
-      }
+      return getPathIfExistsOrDefaultDirectory(args[0]);
     }
 
     return Path.of(DEFAULT_DIRECTORY);
