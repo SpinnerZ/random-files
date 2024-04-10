@@ -1,11 +1,15 @@
 package org.example.implementations;
 
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import org.example.FileChecker;
@@ -22,7 +26,7 @@ public class FileHandlerImpl implements FileHandler {
   public List<Path> loadTxtFiles(Path dir) {
 
     try (Stream<Path> files = Files.list(dir)) {
-      return files.map(Path::getFileName).filter(fileChecker::isTxtFile).toList();
+      return files.filter(fileChecker::isTxtFile).toList();
     } catch (IOException e) {
       throw new RuntimeException("Error while reading files from directory", e);
     }
@@ -34,7 +38,7 @@ public class FileHandlerImpl implements FileHandler {
       return lines.toList();
     } catch (IOException e) {
       System.out.println("Error while reading lines from file " + txtFile.getFileName());
-      System.out.println(e.getMessage());
+      e.printStackTrace();
       return new ArrayList<>();
     }
   }
@@ -46,13 +50,14 @@ public class FileHandlerImpl implements FileHandler {
     return Path.of(dir.toString(), LocalDate.now().format(dmy));
   }
 
-  public void writeLine(Path file, String line) {
+  public void writeLine(Path file, Collection<String> lines) {
+
+    Path target = Path.of(file.toString() + ".txt");
 
     try {
-      Files.writeString(file, line);
+      Files.write(target, lines, CREATE, APPEND);
     } catch (IOException e) {
       System.out.println("Error while writing to file " + file.getFileName());
-      System.out.println("Line: " + line);
       System.out.println(e.getMessage());
     }
   }

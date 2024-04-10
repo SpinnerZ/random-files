@@ -3,15 +3,10 @@ package org.example.implementations;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import org.example.FileChecker;
 
 public final class FileCheckerImpl implements FileChecker {
-
-  private final String defaultDirectory;
-
-  public FileCheckerImpl(String defaultDirectory) {
-    this.defaultDirectory = defaultDirectory;
-  }
 
   public boolean isTxtFile(Path filePath) {
 
@@ -20,7 +15,11 @@ public final class FileCheckerImpl implements FileChecker {
     return fileName.endsWith(".txt");
   }
 
-  public Path getPathIfExistsOrDefaultDirectory(String arg) {
+  public Optional<Path> getPathIfExists(String arg) {
+
+    if (arg == null) {
+      return Optional.empty();
+    }
 
     try {
 
@@ -28,27 +27,26 @@ public final class FileCheckerImpl implements FileChecker {
 
       if (!Files.isDirectory(filePath)) {
 
-        System.out.println(
-            "Given path is not a directory. Working with default directory: " + defaultDirectory);
-        return Path.of(defaultDirectory);
+        System.out.println("Given directory was not found.");
+        System.exit(1);
       }
 
-      return filePath;
+      return Optional.of(filePath);
 
     } catch (IOException e) {
-
-      System.out.println(
-          "Given path does not exist. Working with default directory: " + defaultDirectory);
-      return Path.of(defaultDirectory);
+      return Optional.empty();
     }
   }
 
-  public Path getValidWorkingDirectory(String path) {
+  public Path getValidWorkingDirectory(String directory) {
 
-    if (path != null) {
-      return getPathIfExistsOrDefaultDirectory(path);
+    Optional<Path> path = getPathIfExists(directory);
+
+    if (path.isEmpty()) {
+      System.out.println("Invalid directory: " + directory);
+      System.exit(1);
     }
 
-    return Path.of(defaultDirectory);
+    return path.get();
   }
 }

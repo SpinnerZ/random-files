@@ -1,6 +1,7 @@
 package org.example;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.List;
 
 public interface FileHandler {
@@ -11,5 +12,5 @@ public interface FileHandler {
 
   Path createFileName(Path dir);
 
-  void writeLine(Path file, String line);
+  void writeLine(Path file, Collection<String> line);
 }
