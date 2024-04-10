@@ -8,4 +8,8 @@ public interface FileHandler {
   List<Path> loadTxtFiles(Path originPath);
 
   List<String> loadLines(Path txtFile);
+
+  Path createFileName(Path dir);
+
+  void writeLine(Path file, String line);
 }

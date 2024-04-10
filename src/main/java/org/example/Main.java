@@ -20,8 +20,7 @@ public class Main {
   }
 
   public void randomizeLists(String[] args) {
-    /* Create a result file at the results directory. Name it with the current date
-     * Fill the result taking one line from each randomized file in round-robin*/
+    /* Fill the result taking one line from each randomized file in round-robin*/
 
     final Path originPath = fileChecker.getValidWorkingDirectory(args[0]);
     final Path resultsPath = fileChecker.getValidWorkingDirectory(args[1]);
@@ -31,5 +30,10 @@ public class Main {
 
     txtFiles.forEach(file -> filesLines.add(fileHandler.loadLines(file)));
     filesLines.forEach(Collections::shuffle);
+
+    Path resultFile = fileHandler.createFileName(resultsPath);
+    writeOneLineFromEachFile(resultFile, filesLines);
   }
+
+  private void writeOneLineFromEachFile(Path resultFile, List<List<String>> filesLines) {}
 }

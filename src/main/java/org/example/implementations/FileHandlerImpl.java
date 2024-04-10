@@ -3,6 +3,8 @@ package org.example.implementations;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -34,6 +36,24 @@ public class FileHandlerImpl implements FileHandler {
       System.out.println("Error while reading lines from file " + txtFile.getFileName());
       System.out.println(e.getMessage());
       return new ArrayList<>();
+    }
+  }
+
+  public Path createFileName(Path dir) {
+
+    DateTimeFormatter dmy = DateTimeFormatter.ofPattern("dd-MM-yy");
+
+    return Path.of(dir.toString(), LocalDate.now().format(dmy));
+  }
+
+  public void writeLine(Path file, String line) {
+
+    try {
+      Files.writeString(file, line);
+    } catch (IOException e) {
+      System.out.println("Error while writing to file " + file.getFileName());
+      System.out.println("Line: " + line);
+      System.out.println(e.getMessage());
     }
   }
 }

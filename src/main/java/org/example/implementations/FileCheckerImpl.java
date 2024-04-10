@@ -13,10 +13,6 @@ public final class FileCheckerImpl implements FileChecker {
     this.defaultDirectory = defaultDirectory;
   }
 
-  private FileCheckerImpl() {
-    throw new IllegalStateException("Utility class");
-  }
-
   public boolean isTxtFile(Path filePath) {
 
     final String fileName = filePath.getFileName().toString();
