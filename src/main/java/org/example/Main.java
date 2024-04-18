@@ -39,7 +39,7 @@ public class Main {
     Path resultFile = fileHandler.createFileName(resultsPath);
     writeOneLineFromEachFile(resultFile, filesLines);
 
-    System.out.println("Result file created: " + resultFile);
+    fileHandler.openFile(Path.of(resultFile.toString() + ".txt").toFile());
   }
 
   private void writeOneLineFromEachFile(Path resultFile, List<List<String>> filesLines) {

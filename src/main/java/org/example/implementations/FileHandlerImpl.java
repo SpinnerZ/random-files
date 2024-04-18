@@ -3,6 +3,8 @@ package org.example.implementations;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -76,6 +78,17 @@ public class FileHandlerImpl implements FileHandler {
       Files.deleteIfExists(
           Path.of(dir.toString(), today.minusDays(3L).format(DATE_TIME_FORMATTER) + ".txt"));
     } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  @Override
+  public void openFile(File file) {
+
+    try {
+      Desktop.getDesktop().open(file);
+    } catch (IOException e) {
+      System.out.println("Error while opening file " + file.getName());
       System.out.println(e.getMessage());
     }
   }

@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface FileHandler {
   void writeLine(Path file, Collection<String> line);
 
   void deletePreviousFiles(Path dir);
+
+  void openFile(File file);
 }
