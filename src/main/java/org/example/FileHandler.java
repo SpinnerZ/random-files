@@ -13,4 +13,6 @@ public interface FileHandler {
   Path createFileName(Path dir);
 
   void writeLine(Path file, Collection<String> line);
+
+  void deletePreviousFiles(Path dir);
 }

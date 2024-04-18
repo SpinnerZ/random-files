@@ -32,6 +32,7 @@ public class Main {
     Collections.shuffle(txtFiles);
     List<List<String>> filesLines = new ArrayList<>();
 
+    fileHandler.deletePreviousFiles(resultsPath);
     txtFiles.forEach(file -> filesLines.add(new ArrayList<>(fileHandler.loadLines(file))));
     filesLines.forEach(Collections::shuffle);
 

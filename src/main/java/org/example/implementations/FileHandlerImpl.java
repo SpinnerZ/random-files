@@ -17,6 +17,8 @@ import org.example.FileHandler;
 
 public class FileHandlerImpl implements FileHandler {
 
+  private static final DateTimeFormatter DATE_TIME_FORMATTER =
+      DateTimeFormatter.ofPattern("dd-MM-yy");
   private final FileChecker fileChecker;
 
   public FileHandlerImpl(FileChecker fileChecker) {
@@ -45,9 +47,7 @@ public class FileHandlerImpl implements FileHandler {
 
   public Path createFileName(Path dir) {
 
-    DateTimeFormatter dmy = DateTimeFormatter.ofPattern("dd-MM-yy");
-
-    return Path.of(dir.toString(), LocalDate.now().format(dmy));
+    return Path.of(dir.toString(), LocalDate.now().format(DATE_TIME_FORMATTER));
   }
 
   public void writeLine(Path file, Collection<String> lines) {
@@ -58,6 +58,24 @@ public class FileHandlerImpl implements FileHandler {
       Files.write(target, lines, CREATE, APPEND);
     } catch (IOException e) {
       System.out.println("Error while writing to file " + file.getFileName());
+      System.out.println(e.getMessage());
+    }
+  }
+
+  @Override
+  public void deletePreviousFiles(Path dir) {
+
+    LocalDate today = LocalDate.now();
+
+    try {
+      Files.deleteIfExists(Path.of(dir.toString(), today.format(DATE_TIME_FORMATTER) + ".txt"));
+      Files.deleteIfExists(
+          Path.of(dir.toString(), today.minusDays(1L).format(DATE_TIME_FORMATTER) + ".txt"));
+      Files.deleteIfExists(
+          Path.of(dir.toString(), today.minusDays(2L).format(DATE_TIME_FORMATTER) + ".txt"));
+      Files.deleteIfExists(
+          Path.of(dir.toString(), today.minusDays(3L).format(DATE_TIME_FORMATTER) + ".txt"));
+    } catch (IOException e) {
       System.out.println(e.getMessage());
     }
   }
